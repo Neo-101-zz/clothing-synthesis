@@ -1,9 +1,17 @@
+#!/usr/bin/env python
+# -*- coding=utf8 -*-
+"""
+# @Author: Jingze Lu
+# @Created Time: 2019-06-23 00:46:21
+# @Description: 
+"""
+
 import time
 
 import cv2
 
-from load_img import *
-from save_res import *
+import loadimg as ld
+import saveres as sv
 
 def is_same(img_now, img_pre):
     # compare two images' shape
@@ -30,21 +38,23 @@ def find_same(confs, save):
                 img_now_name = confs['input_path'][i][j] 
                 img_pre_name = confs['input_path'][k][j] 
                 try:
-                    img_now = load_img(img_now_name, 
+                    img_now = ld.load_img(img_now_name, 
                                        cv2.IMREAD_COLOR, 
                                        False, 0)
-                    img_pre = load_img(img_pre_name,
+                    img_pre = ld.load_img(img_pre_name,
                                        cv2.IMREAD_COLOR,
                                        False, 0)
                 except IOError:
                     if save:
-                        save_res(confs['same_path'], same)
+                        sv.save_res(confs['same_path'], same)
+                    t_e = time.time()
+                    print('find same completed in {0:.2f}s'.format(t_e - t_s))
                     return same
                 if is_same(img_now, img_pre):
                     find_same = True
                     one_dataset.append(k)
-                    print(img_now_name + ' and ' + img_pre_name 
-                          + ' are completely Equal')
+                    print('{0} and {1} are completely equal.'\
+                          .format(img_now_name, img_pre_name))
                     break
             if not find_same: 
                 one_dataset.append(i)
@@ -52,8 +62,8 @@ def find_same(confs, save):
         same.append(one_dataset)
 
     t_e = time.time()
-    print('find_same complete in ' + str(t_e - t_s))
+    print('find same completed in {0:.2f}s'.format(t_e - t_s))
 
     if save:
-        save_res(confs['same_path'], same)
+        sv.save_res(confs['same_path'], same)
     return same

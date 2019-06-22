@@ -3,8 +3,8 @@ import time
 
 import cv2
 
-from load_img import *
-from save_res import *
+import loadimg as ld
+import saveres as sv
 
 def get_axis(mask, rect):
     # there may be holes in the mask
@@ -33,16 +33,16 @@ def get_axis(mask, rect):
 
     return axis
 
-def cal_x_offset(top_mask, bottom_mask, top_rect, bottom_rect):
+def cal_x_bias(top_mask, bottom_mask, top_rect, bottom_rect):
     top_cen_axis = get_axis(top_mask, top_rect)
     bottom_cen_axis = get_axis(bottom_mask, bottom_rect) 
     # 1.25 is an empirical coefficient to precisely adjust the
-    # offset between top and bottom
-    x_offset = int((float(bottom_cen_axis - top_cen_axis)) * 1.25) 
+    # bias between top and bottom
+    x_bias = int((float(bottom_cen_axis - top_cen_axis)) * 1.25) 
 
-    return x_offset
+    return x_bias
 
-def cal_y_offset(top, bottom, thre):
+def cal_y_bias(top, bottom, thre):
     # search from bottom
     row, col = top.shape[0:2]
     feet_top = 0
@@ -78,8 +78,8 @@ def cal_y_offset(top, bottom, thre):
 
     return feet_bottom - feet_top
 
-def cal_all_offset(confs, masks, same, save):
-    offsets = []
+def cal_bias(confs, masks, same, save):
+    biases = []
 
     for i in range(confs['datasets_num']):
         top_bottom_same = False
@@ -92,55 +92,55 @@ def cal_all_offset(confs, masks, same, save):
                     break
             except IndexError:
                 if save:
-                        save_res(confs['offset_path'], offsets)
-                return offsets
+                        sv.save_res(confs['bias_path'], biases)
+                return biases
 
         if top_bottom_same:
-            single_offset = offsets[j]
-            offsets.append(single_offset)
+            single_bias = biases[j]
+            biases.append(single_bias)
             continue
 
-        single_offset = {}
+        single_bias = {}
         top_name = confs['input_path'][i][0]
         bottom_name = confs['input_path'][i][1]
 
-        # cal x offset
+        # cal x bias
         try:
             top_mask = masks[i]['1'] 
             bottom_mask = masks[i]['2'] 
         except IndexError:
             if save:
-                    save_res(confs['offset_path'], offsets)
-            return offsets
+                sv.save_res(confs['bias_path'], biases)
+            return biases
 
         t_s = time.time()
-        x_offset = cal_x_offset(top_mask, bottom_mask, 
-                                confs['rect_top'], confs['rect_bottom'])
+        x_bias = cal_x_bias(top_mask, bottom_mask, 
+                            confs['rect_top'], confs['rect_bottom'])
         t_e = time.time()
-        print('00' + str(i+1) + ' x calculation completed in ' 
-                   + str(t_e - t_s))
-        single_offset['x'] = x_offset
+        print('00{0:d} bias compution along x axis completed in {1:.2f}s'\
+              .format(i+1, t_e - t_s))
+        single_bias['x'] = x_bias
 
-        # cal y offset
+        # cal y bias
         try:
-            top_green = load_img(top_name, cv2.IMREAD_COLOR, True, 1)
-            bottom_green = load_img(bottom_name, 
+            top_green = ld.load_img(top_name, cv2.IMREAD_COLOR, True, 1)
+            bottom_green = ld.load_img(bottom_name, 
                                     cv2.IMREAD_COLOR, True, 1)
         except IOError:
             if save:
-                    save_res(confs['offset_path'], offsets)
-            return offsets
+                sv.save_res(confs['bias_path'], biases)
+            return biases
 
         t_s = time.time()
-        y_offset = cal_y_offset(top_green, bottom_green,
+        y_bias = cal_y_bias(top_green, bottom_green,
                                 confs['thre_feet'])
         t_e = time.time()
-        print('00' + str(i+1) + ' y calculation completed in ' 
-                   + str(t_e - t_s))
-        single_offset['y'] = y_offset
+        print('00{0:d} bias compution along y axis completed in {1:.2f}s'\
+              .format(i+1, t_e - t_s))
+        single_bias['y'] = y_bias
 
-        offsets.append(single_offset)
+        biases.append(single_bias)
 
     if save:
-        save_res(confs['offset_path'], offsets)
-    return offsets
+        sv.save_res(confs['bias_path'], biases)
+    return biases

@@ -1,21 +1,42 @@
+import os
+
 def conf():
     datasets_num = 8
     inputs_num = 4
+    input_path_prefix = './input/'
+    output_path_prefix = './output/'
+    analysis_path_prefix = './analysis/'
+    # make dirs
+    if not os.path.exists(output_path_prefix):
+        os.system('mkdir ' + output_path_prefix)
+    if not os.path.exists(analysis_path_prefix):
+        os.system('mkdir ' + analysis_path_prefix)
+    mask_path_prefix = analysis_path_prefix + 'mask/'
+    same_path = analysis_path_prefix + 'same.txt'
+    offset_path = analysis_path_prefix + 'offset.txt'
+    above_path = analysis_path_prefix + 'above.txt' 
 
-    # generate input image names
-    img_names = []
-    img_prefix = './data/'
+    # generate paths 
+    input_path = []
+    mask_path = []
+    output_path = []
     for i in range(datasets_num):
-        one_dataset = []
+        input_path_set = []
+        mask_path_set = []
         for j in range(inputs_num):
-            name = img_prefix + '00' + str(i+1) \
-                 + '-input' + str(j+1) \
-                 + '.jpg'
-            one_dataset.append(name)
-            img_names.append(one_dataset)
-
-    channels_path = '../channels/'
-    masks_path = '../masks/'
+            input_name = input_path_prefix + '00' + str(i+1) \
+                       + '-input' + str(j+1) \
+                       + '.jpg'
+            mask_name = mask_path_prefix + '00' + str(i+1) \
+                      + '-input' + str(j+1) \
+                      + '_mask.jpg'
+            input_path_set.append(input_name) 
+            mask_path_set.append(mask_name)
+        input_path.append(input_path_set)
+        mask_path.append(mask_path_set)
+        output_name = output_path_prefix + '00' + str(i+1) \
+                    + '-output.jpg'
+        output_path.append(output_name)
 
     seed_top = [
         0.63150289017341,
@@ -53,9 +74,12 @@ def conf():
 
     confs['datasets_num'] = datasets_num
     confs['inputs_num'] = inputs_num
-    confs['img_names'] = img_names
-    confs['channels_path'] = channels_path
-    confs['masks_path'] = masks_path
+    confs['input_path'] = input_path 
+    confs['mask_path'] = mask_path
+    confs['same_path'] = same_path
+    confs['offset_path'] = offset_path
+    confs['above_path'] = above_path
+    confs['output_path'] = output_path
     confs['seed_top'] = seed_top
     confs['seed_input4'] = seed_input4
     confs['seed_bottom'] = seed_bottom

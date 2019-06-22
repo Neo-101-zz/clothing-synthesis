@@ -1,7 +1,10 @@
 import os
-import cv2
 import time
+
+import cv2
+
 from load_img import *
+from save_res import *
 
 def get_axis(mask, rect):
     # there may be holes in the mask
@@ -15,6 +18,7 @@ def get_axis(mask, rect):
     right_bound = int(rect[2] * col)
     top_bound = int(rect[1] * row)
     bottom_bound = int(rect[3] * row)
+
     for y in range(top_bound, bottom_bound):
         for x in range(left_bound, right_bound):
             if mask[y, x] == 0:
@@ -22,15 +26,18 @@ def get_axis(mask, rect):
             else:
                 if x < left:
                     left = x
-                    if x > right:
-                        right = x
-                        axis = int((left + right) / 2.0)
+                if x > right:
+                    right = x
+
+    axis = int((left + right) / 2.0)
 
     return axis
 
 def cal_x_offset(top_mask, bottom_mask, top_rect, bottom_rect):
     top_cen_axis = get_axis(top_mask, top_rect)
     bottom_cen_axis = get_axis(bottom_mask, bottom_rect) 
+    # 1.25 is an empirical coefficient to precisely adjust the
+    # offset between top and bottom
     x_offset = int((float(bottom_cen_axis - top_cen_axis)) * 1.25) 
 
     return x_offset
@@ -71,7 +78,7 @@ def cal_y_offset(top, bottom, thre):
 
     return feet_bottom - feet_top
 
-def cal_all_offset(confs, masks, same):
+def cal_all_offset(confs, masks, same, save):
     offsets = []
 
     for i in range(confs['datasets_num']):
@@ -84,6 +91,8 @@ def cal_all_offset(confs, masks, same):
                     top_bottom_same = True
                     break
             except IndexError:
+                if save:
+                        save_res(confs['offset_path'], offsets)
                 return offsets
 
         if top_bottom_same:
@@ -92,14 +101,16 @@ def cal_all_offset(confs, masks, same):
             continue
 
         single_offset = {}
-        top_name = confs['img_names'][i][0]
-        bottom_name = confs['img_names'][i][1]
+        top_name = confs['input_path'][i][0]
+        bottom_name = confs['input_path'][i][1]
 
         # cal x offset
         try:
             top_mask = masks[i]['1'] 
             bottom_mask = masks[i]['2'] 
         except IndexError:
+            if save:
+                    save_res(confs['offset_path'], offsets)
             return offsets
 
         t_s = time.time()
@@ -113,12 +124,16 @@ def cal_all_offset(confs, masks, same):
         # cal y offset
         try:
             top_green = load_img(top_name, cv2.IMREAD_COLOR, True, 1)
-            bottom_green = load_img(bottom_name, cv2.IMREAD_COLOR, True, 1)
+            bottom_green = load_img(bottom_name, 
+                                    cv2.IMREAD_COLOR, True, 1)
         except IOError:
+            if save:
+                    save_res(confs['offset_path'], offsets)
             return offsets
 
         t_s = time.time()
-        y_offset = cal_y_offset(top_green, bottom_green, confs['thre_feet'])
+        y_offset = cal_y_offset(top_green, bottom_green,
+                                confs['thre_feet'])
         t_e = time.time()
         print('00' + str(i+1) + ' y calculation completed in ' 
                    + str(t_e - t_s))
@@ -126,4 +141,6 @@ def cal_all_offset(confs, masks, same):
 
         offsets.append(single_offset)
 
+    if save:
+        save_res(confs['offset_path'], offsets)
     return offsets

@@ -1,7 +1,9 @@
 import os
+import time
+
 import cv2
 import numpy as np
-import time
+
 from load_img import *
 from grow_gray import *
 
@@ -13,7 +15,7 @@ def segment_gray(confs, same, save):
             # skip input3
             if j == 2:
                 continue
-            read_name = confs['img_names'][i][j]
+            read_name = confs['input_path'][i][j]
             # find same
             try:
                 if same[i][j] != i:
@@ -55,8 +57,7 @@ def segment_gray(confs, same, save):
             except IndexError:
                 return masks
             if save:
-                write_name = confs['masks_path'] + (read_name.split('.jpg'))[0] + '_mask.jpg'
-                cv2.imwrite(write_name, one_dataset[str(j+1)])
+                cv2.imwrite(confs['mask_path'][i][j], one_dataset[str(j+1)])
 
         masks.append(one_dataset)
 

@@ -33,12 +33,11 @@ def gray_region_growing(img, seed_rate, threshold, rect):
         for m in range(4):
             tempY = curY + orient[m][0]
             tempX = curX + orient[m][1]
-            if tempY < bottom and tempY >= top and 
-               tempX < right and tempX >= left:
+            if (tempY < bottom and tempY >= top and 
+                tempX < right and tempX >= left):
                 # calculate the distance between pixel and region
                 dist = abs(img[tempY, tempX] - mean_reg)
-                if dist < threshold and \
-                   check[tempY, tempX] == 0:
+                if dist < threshold and check[tempY, tempX] == 0:
                     # update the region
                     check[tempY, tempX] = 1
                     reg[tempY, tempX] = label
@@ -47,8 +46,9 @@ def gray_region_growing(img, seed_rate, threshold, rect):
                     sumTemp += img[tempY, tempX]
                     count += 1
 
+        mean_reg = (mean_reg * size + float(sumTemp)) \
+                 / (size + count)
         size += count
-        mean_reg = (mean_reg * size + float(sumTemp)) / size
 
     reg = np.uint8(reg)
 

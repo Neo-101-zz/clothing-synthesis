@@ -1,7 +1,9 @@
-import cv2
 import os
-import numpy as np
 import time
+
+import cv2
+import numpy as np
+
 from load_img import *
 
 def cover_single(top, bottom, mask_top, 
@@ -23,10 +25,10 @@ def cover_single(top, bottom, mask_top,
                 # top image. The poisition of model to the model in
                 # the top image is the same as output image.
                 # So use top image as background.
-                if x+offset['x'] < col and 
-                   y+offset['y'] < row and 
-                   mask_top[y, x] == 0 and 
-                   mask_bottom[y+offset['y'], x+offset['x']] == 255:
+                if (x+offset['x'] < col and 
+                    y+offset['y'] < row and 
+                    mask_top[y, x] == 0 and 
+                    mask_bottom[y+offset['y'], x+offset['x']] == 255):
                     # draw the part that top does not cover the bottom
                     res[y, x] = bottom[y+offset['y'], x+offset['x']]
                 else:
@@ -35,9 +37,9 @@ def cover_single(top, bottom, mask_top,
                     # backgound of output image.
                     res[y, x] = top[y, x]
             elif above == 'bottom':
-                if x+offset['x'] < col and 
-                   y+offset['y'] < row and 
-                   mask_bottom[y+offset['y'], x+offset['x']] == 255:
+                if (x+offset['x'] < col and 
+                    y+offset['y'] < row and 
+                    mask_bottom[y+offset['y'], x+offset['x']] == 255):
                     # draw the bottom
                     res[y, x] = bottom[y+offset['y'], x+offset['x']]
                 else:
@@ -48,8 +50,8 @@ def cover_single(top, bottom, mask_top,
 def cover_all(confs, above, offsets, masks):
     for i in range(confs['datasets_num']):
         # load top and bottom 
-        top_name = confs['img_names'][i][0]
-        bottom_name = confs['img_names'][i][1]
+        top_name = confs['input_path'][i][0]
+        bottom_name = confs['input_path'][i][1]
         try:
             top = load_img(top_name, cv2.IMREAD_COLOR, False, 0)
             bottom= load_img(bottom_name, cv2.IMREAD_COLOR, False, 0)
@@ -69,5 +71,4 @@ def cover_all(confs, above, offsets, masks):
         print('00' + str(i+1) + ' cover complete in ' 
                    + str(t_e - t_s))
 
-        write_name = (top_name.split('input'))[0] + 'output.jpg'
-        cv2.imwrite(write_name, res)
+        cv2.imwrite(confs['output_path'][i], res)

@@ -8,3 +8,4 @@ input1.jpg: top image
 input2.jpg: bottom image  
 input3.jpg: match of top and bottom (wear top into bottom or not)  
 input4.jpg: match of top and bottom (waer top into bottom or not)  
+![testset](testset.png)

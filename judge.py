@@ -6,13 +6,6 @@
 # @Description: 
 """
 
-import os
-import time
-
-import cv2
-
-import saveres as sv
-
 # extract waist line of mask
 def extract(mask, judge_line):
     row, col = mask.shape[0:2]
@@ -35,29 +28,3 @@ def top_above(line, length):
         if line[i] != 0: # top above
             return True 
     return False # bottom above 
-
-def judge_above(confs, masks, save):
-    above = []
-    # extract line from input1
-    for i in range(confs['datasets_num']):
-        # read mask of input4
-        try:
-            mask_input4 = masks[i]['4']
-        except IndexError:
-            if save:
-                sv.save_res(confs['above_path'], above)
-            return above
-        t_s = time.time()
-        # extract line from mask of input4
-        line, length = extract(mask_input4, confs['waist_line'])
-        if top_above(line, length):
-            above.append('top')
-        else:
-            above.append('bottom')
-        t_e = time.time()
-        print('00{0:d} judgement completed in {1:.2f}s'\
-              .format(i+1, t_e - t_s)) 
-
-    if save:
-        sv.save_res(confs['above_path'], above)
-    return above

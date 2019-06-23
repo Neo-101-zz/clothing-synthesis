@@ -1,8 +1,8 @@
-#! /usr/bin/env python
+# !/usr/bin/env python
 # -*- coding=utf8 -*-
 """
 # @Author: Jingze Lu
-# @Created Time: 2019-06-23 00:46:21
+# @Created Time: 2019-06-23 16:22:44
 # @Description: 
 """
 
@@ -26,44 +26,16 @@ def is_same(img_now, img_pre):
 
         return False
 
-def find_same(confs, save):
+def find_same(outfits):
     t_s = time.time()
-    same = []
-    for i in range(confs['datasets_num']):
-        one_dataset = []
-        for j in range(confs['inputs_num']):
-            find_same = False
-            # find same imgs
-            for k in range(i):
-                img_now_name = confs['input_path'][i][j] 
-                img_pre_name = confs['input_path'][k][j] 
-                try:
-                    img_now = ld.load_img(img_now_name, 
-                                       cv2.IMREAD_COLOR, 
-                                       False, 0)
-                    img_pre = ld.load_img(img_pre_name,
-                                       cv2.IMREAD_COLOR,
-                                       False, 0)
-                except IOError:
-                    if save:
-                        sv.save_res(confs['same_path'], same)
-                    t_e = time.time()
-                    print('find same completed in {0:.2f}s'.format(t_e - t_s))
-                    return same
-                if is_same(img_now, img_pre):
-                    find_same = True
-                    one_dataset.append(k)
-                    print('{0} and {1} are completely equal.'\
-                          .format(img_now_name, img_pre_name))
-                    break
-            if not find_same: 
-                one_dataset.append(i)
-
-        same.append(one_dataset)
-
-    t_e = time.time()
-    print('find same completed in {0:.2f}s'.format(t_e - t_s))
-
-    if save:
-        sv.save_res(confs['same_path'], same)
-    return same
+    for i in range(len(outfits)):
+        top_same = bottom_same = i 
+        for j in range(i):
+            if (top_same == i and 
+                is_same(outfits[i].top, outfits[j].top)):
+                top_same = j 
+            if (bottom_same ==i and
+                is_same(outfits[i].bottom, outfits[j].bottom)):
+                bottom_same = j 
+        # i represents the index
+        outfits[i].same = [i, top_same, bottom_same]

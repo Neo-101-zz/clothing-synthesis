@@ -6,14 +6,6 @@
 # @Description: 
 """
 
-import os
-import time
-
-import cv2
-
-import loadimg as ld
-import saveres as sv
-
 def get_axis(mask, rect):
     # there may be holes in the mask
     # So boundingRect() may return
@@ -41,7 +33,7 @@ def get_axis(mask, rect):
 
     return axis
 
-def cal_x_bias(top_mask, bottom_mask, top_rect, bottom_rect):
+def cpt_x_bias(top_mask, bottom_mask, top_rect, bottom_rect):
     top_cen_axis = get_axis(top_mask, top_rect)
     bottom_cen_axis = get_axis(bottom_mask, bottom_rect) 
     # 1.25 is an empirical coefficient to precisely adjust the
@@ -50,7 +42,7 @@ def cal_x_bias(top_mask, bottom_mask, top_rect, bottom_rect):
 
     return x_bias
 
-def cal_y_bias(top, bottom, thre):
+def cpt_y_bias(top, bottom, thre):
     # search from bottom
     row, col = top.shape[0:2]
     feet_top = 0
@@ -85,70 +77,3 @@ def cal_y_bias(top, bottom, thre):
                 return feet_bottom - feet_top
 
     return feet_bottom - feet_top
-
-def cal_bias(confs, masks, same, save):
-    biases = []
-
-    for i in range(confs['datasets_num']):
-        top_bottom_same = False
-        # find same
-        for j in range(i):
-            try:
-                # find whether top and bottom is same or not
-                if same[i][0] == same[j][0] and same[i][1] == same[j][1]:
-                    top_bottom_same = True
-                    break
-            except IndexError:
-                if save:
-                        sv.save_res(confs['bias_path'], biases)
-                return biases
-
-        if top_bottom_same:
-            single_bias = biases[j]
-            biases.append(single_bias)
-            continue
-
-        single_bias = {}
-        top_name = confs['input_path'][i][0]
-        bottom_name = confs['input_path'][i][1]
-
-        # cal x bias
-        try:
-            top_mask = masks[i]['1'] 
-            bottom_mask = masks[i]['2'] 
-        except IndexError:
-            if save:
-                sv.save_res(confs['bias_path'], biases)
-            return biases
-
-        t_s = time.time()
-        x_bias = cal_x_bias(top_mask, bottom_mask, 
-                            confs['rect_top'], confs['rect_bottom'])
-        t_e = time.time()
-        print('00{0:d} bias compution along x axis completed in {1:.2f}s'\
-              .format(i+1, t_e - t_s))
-        single_bias['x'] = x_bias
-
-        # cal y bias
-        try:
-            top_green = ld.load_img(top_name, cv2.IMREAD_COLOR, True, 1)
-            bottom_green = ld.load_img(bottom_name, 
-                                    cv2.IMREAD_COLOR, True, 1)
-        except IOError:
-            if save:
-                sv.save_res(confs['bias_path'], biases)
-            return biases
-
-        t_s = time.time()
-        y_bias = cal_y_bias(top_green, bottom_green,
-                                confs['thre_feet'])
-        t_e = time.time()
-        print('00{0:d} bias compution along y axis completed in {1:.2f}s'\
-              .format(i+1, t_e - t_s))
-        single_bias['y'] = y_bias
-
-        biases.append(single_bias)
-
-    if save:
-        sv.save_res(confs['bias_path'], biases)
-    return biases

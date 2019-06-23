@@ -6,14 +6,6 @@
 # @Description: 
 """
 
-import os
-import time
-
-import cv2
-import numpy as np
-
-import loadimg as ld
-
 def cover_single(top, bottom, mask_top, 
                  mask_bottom, above, offset):
     row, col = top.shape[0:2]
@@ -54,30 +46,3 @@ def cover_single(top, bottom, mask_top,
                     # copy the top
                     res[y, x] = top[y, x]
     return res 
-
-def cover_all(confs, above, offsets, masks):
-    for i in range(confs['datasets_num']):
-        # load top and bottom 
-        top_name = confs['input_path'][i][0]
-        bottom_name = confs['input_path'][i][1]
-        try:
-            top = ld.load_img(top_name, cv2.IMREAD_COLOR, False, 0)
-            bottom= ld.load_img(bottom_name, cv2.IMREAD_COLOR, False, 0)
-        except IOError:
-            return
-
-        try:
-            mask_top = masks[i]['1']
-            mask_bottom = masks[i]['2']
-        except IndexError:
-            return
-
-        t_s = time.time()
-        res = cover_single(top, bottom, mask_top, mask_bottom,
-                           above[i], offsets[i])
-        t_e  = time.time()
-
-        print('00{0:d} cover completed in {1:.2f}s'\
-              .format(i+1, t_e - t_s)) 
-
-        cv2.imwrite(confs['output_path'][i], res)

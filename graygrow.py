@@ -6,7 +6,6 @@
 # @Description: 
 """
 
-import cv2
 import numpy as np
 
 def gray_region_growing(img, seed_rate, threshold, rect):

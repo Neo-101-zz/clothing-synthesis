@@ -35,10 +35,10 @@ def get_axis(mask, rect):
 
 def cpt_x_bias(top_mask, bottom_mask, top_rect, bottom_rect):
     top_cen_axis = get_axis(top_mask, top_rect)
-    bottom_cen_axis = get_axis(bottom_mask, bottom_rect) 
+    bottom_cen_axis = get_axis(bottom_mask, bottom_rect)
     # 1.25 is an empirical coefficient to precisely adjust the
     # bias between top and bottom
-    x_bias = int((float(bottom_cen_axis - top_cen_axis)) * 1.25) 
+    x_bias = int((float(bottom_cen_axis - top_cen_axis)) * 1.25)
 
     return x_bias
 

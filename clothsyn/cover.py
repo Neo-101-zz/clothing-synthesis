@@ -6,7 +6,9 @@
 # @Description: 
 """
 
-def cover_single(top, bottom, mask_top, 
+import numpy as np
+
+def cover_single(top, bottom, mask_top,
                  mask_bottom, above, offset):
     row, col = top.shape[0:2]
     res = np.zeros((row, col, 3), np.float32)
@@ -37,8 +39,8 @@ def cover_single(top, bottom, mask_top,
                     # backgound of output image.
                     res[y, x] = top[y, x]
             elif above == 'bottom':
-                if (x+offset['x'] < col and 
-                    y+offset['y'] < row and 
+                if (x+offset['x'] < col and
+                    y+offset['y'] < row and
                     mask_bottom[y+offset['y'], x+offset['x']] == 255):
                     # draw the bottom
                     res[y, x] = bottom[y+offset['y'], x+offset['x']]

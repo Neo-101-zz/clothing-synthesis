@@ -6,7 +6,6 @@
 # @Description: 
 """
 
-
 def save_res(path, target):
     with open(path, 'w') as f:
         f.write(str(target))

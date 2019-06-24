@@ -11,7 +11,8 @@ import os
 def configure():
     confs = {}
 
-    confs['outfits_num'] = outfits_num = 4
+    outfits_num = int(input('Enter the number of outfits: '))
+    confs['outfits_num'] = outfits_num
     confs['inputs_num'] = inputs_num = 4
     input_dir = './input/'
     output_dir = './output/'

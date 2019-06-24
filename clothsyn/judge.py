@@ -26,5 +26,5 @@ def extract(mask, judge_line):
 def top_above(line, length):
     for i in range(length):
         if line[i] != 0: # top above
-            return True 
+            return True
     return False # bottom above 

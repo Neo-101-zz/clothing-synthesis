@@ -19,8 +19,8 @@ class Outfit():
     def __init__(self, top_path, bottom_path, input4_path):
         try:
             self.top = ld.load_img(top_path, cv2.IMREAD_COLOR, False, 0)
-            self._top_r = self.top[:, :, 2]
-            self._top_g = self.top[:, :, 1]
+            self._top_r = self.top[:,:,2]
+            self._top_g = self.top[:,:,1]
             self.bottom = ld.load_img(bottom_path, cv2.IMREAD_COLOR,
                                        False, 0)
             self._bottom_r = self.bottom[:, :, 2]
@@ -33,13 +33,13 @@ class Outfit():
     def segment(self, cloth, seed, thre, rect, save_path):
         if cloth == 'top':
             res = self.top_mask = ggrow.gray_region_growing(
-                self._top_r, seed, thre, rect) 
+                self._top_r, seed, thre, rect)
         elif cloth == 'bottom':
             res = self.bottom_mask = ggrow.gray_region_growing(
-                self._bottom_r, seed, thre, rect) 
+                self._bottom_r, seed, thre, rect)
         elif cloth == 'input4':
             res = self.input4_mask = ggrow.gray_region_growing(
-                self._input4_b, seed, thre, rect) 
+                self._input4_b, seed, thre, rect)
         else:
             print('Segment error: wrong input of cloth.')
         if len(save_path) > 0:

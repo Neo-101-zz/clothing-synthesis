@@ -1,14 +1,40 @@
 # !/usr/bin/env python
-# -*- coding=utf8 -*-
-"""
-# @Author: Jingze Lu
-# @Created Time: 2019-06-23 08:36:10
-# @Description: 
-"""
+
+"""Segment gray image by region growing."""
 
 import numpy as np
 
-def gray_region_growing(img, seed_rate, threshold, rect):
+def gray_region_growing(img, seed_rate, thre, rect):
+    """Region growing based on gray image.
+
+    Parameters
+    ----------
+    img : numpy.ndarray
+        Gray image to be segmented.
+    seed_rate : list of floats
+        Seed point for inital growing.  A list of 2 floats in form of
+        [x_ratio, y_ratio].  x_ratio is the ratio of seed's x coordinate
+        to image's width.  y_ratio is the ratio of seed's y coordinate
+        to image's height.
+    thre : int
+        Threshold for growing termination.
+    rect : list of floats
+        Rectangle boundary of top or bottom to be extracted.  A list of
+        4 floats in form of [left/width, top/height, right/width,
+        bottom/height].  left and top is the x coordinate and y coordinate
+        of rectangle's top-left point, respectively.  right and bottom is 
+        the x coordinate and y coordinate of rectangle's bottom-right
+        point, respectively.  width and height is the amount of image's 
+        pixels along x axis and y aixs, respectively.
+
+    Returns
+    -------
+    reg : numpy.ndarray
+        Two-value gray mask of top or bottom.  In the mask, value 255
+        represents the region of top or bottom, while value 0 represents
+        the region of background.
+
+    """
     img = np.float32(img)
     row, col = img.shape[0:2]
     seed = [0, 0]

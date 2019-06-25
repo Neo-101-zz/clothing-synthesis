@@ -1,13 +1,32 @@
 #! /usr/bin/env python
-# -*- coding=utf8 -*-
-"""
-# @Author: Jingze Lu
-# @Created Time: 2019-06-23 00:47:37
-# @Description: 
-"""
 
-# extract waist line of mask
+"""Judge whether top is waered into bottom or not with extracted waist 
+line."""
+
 def extract(mask, judge_line):
+    """
+    Extract waist line of mask.
+
+    Parameters
+    ----------
+    mask : numpy.ndarray
+        Mask of top or bottom.
+    judge_line : list of floats
+        Horizontal line for extract at the height of waist in form of
+        [left_ratio, right_ratio, height_ratio].  left is the ratio of
+        line's left endpoint's x coordinate to the width of image.  right
+        is the ratio of line's right endpoint's x coordiante to the
+        width of image.  height_ratio is the ratio of line's y coordinate
+        to the height of image.
+
+    Returns
+    -------
+    line : list of ints
+        Extracted waist line.
+    int
+        Length of waist line.
+
+    """
     row, col = mask.shape[0:2]
     left = int(judge_line[0] * col)
     right = int(judge_line[1] * col)
@@ -21,9 +40,23 @@ def extract(mask, judge_line):
 
     return line, len(line)
 
-# judge whether top is above 
-# with the extracted line
 def top_above(line, length):
+    """
+    Judge whether top is weared into bottom.
+
+    Parameters
+    ----------
+    line : list of ints
+        Extracted waist line.
+    length : int
+        Length of waist line.
+
+    Returns
+    -------
+    bool
+        True if top weared into bottom, False otherwise.
+
+    """
     for i in range(length):
         if line[i] != 0: # top above
             return True

@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>clothsyn.cptdiff &#8212; clothsyn 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for clothsyn.cptdiff</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;Compute the relative position difference of model with</span>
+<span class="sd">respect to camera between input1 and input2.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="central_x"><a class="viewcode-back" href="../../index.html#clothsyn.cptdiff.central_x">[docs]</a><span class="k">def</span> <span class="nf">central_x</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">rect</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the x value of vertically central axis of top or bottom.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mask : numpy.ndarray</span>
+<span class="sd">        Two-value mask of top image or bottom image.</span>
+<span class="sd">    rect : list of floats</span>
+<span class="sd">        Rectangle boundary of top image or bottom image.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    axis : int</span>
+<span class="sd">        x value of vertically central axis of top or bottom.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># There may be holes in the mask.  So boundingRect() may return</span>
+    <span class="c1"># the boudning of a hole rather than the whole bounding of top or</span>
+    <span class="c1"># bottom.</span>
+    <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">col</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">left_bound</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">col</span><span class="p">)</span>
+    <span class="n">right_bound</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">col</span><span class="p">)</span>
+    <span class="n">top_bound</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">)</span>
+    <span class="n">bottom_bound</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">top_bound</span><span class="p">,</span> <span class="n">bottom_bound</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left_bound</span><span class="p">,</span> <span class="n">right_bound</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">left</span><span class="p">:</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">x</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">right</span><span class="p">:</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="n">axis</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">axis</span></div>
+
+<div class="viewcode-block" id="cpt_x_diff"><a class="viewcode-back" href="../../index.html#clothsyn.cptdiff.cpt_x_diff">[docs]</a><span class="k">def</span> <span class="nf">cpt_x_diff</span><span class="p">(</span><span class="n">top_mask</span><span class="p">,</span> <span class="n">bottom_mask</span><span class="p">,</span> <span class="n">top_rect</span><span class="p">,</span> <span class="n">bottom_rect</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute difference along x axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    top_mask : numpy.ndarray</span>
+<span class="sd">        Mask of top .</span>
+<span class="sd">    bottom_mask : numpy.ndarray</span>
+<span class="sd">        Mask of bottom .</span>
+<span class="sd">    top_rect : list of floats</span>
+<span class="sd">        Rectangle boundary of top.</span>
+<span class="sd">    bottom_rect : list of floats</span>
+<span class="sd">        Rectangle boundary of bottom.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x_diff : int</span>
+<span class="sd">        Difference along x axis.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">top_cen_axis</span> <span class="o">=</span> <span class="n">central_x</span><span class="p">(</span><span class="n">top_mask</span><span class="p">,</span> <span class="n">top_rect</span><span class="p">)</span>
+    <span class="n">bottom_cen_axis</span> <span class="o">=</span> <span class="n">central_x</span><span class="p">(</span><span class="n">bottom_mask</span><span class="p">,</span> <span class="n">bottom_rect</span><span class="p">)</span>
+    <span class="c1"># 1.25 is an empirical coefficient to precisely adjust the</span>
+    <span class="c1"># diff between top and bottom</span>
+    <span class="n">x_diff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">bottom_cen_axis</span> <span class="o">-</span> <span class="n">top_cen_axis</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1.25</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x_diff</span></div>
+
+<div class="viewcode-block" id="cpt_y_diff"><a class="viewcode-back" href="../../index.html#clothsyn.cptdiff.cpt_y_diff">[docs]</a><span class="k">def</span> <span class="nf">cpt_y_diff</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">thre</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute difference along y axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    top : </span>
+<span class="sd">        Top image (green channel).</span>
+<span class="sd">    bottom : </span>
+<span class="sd">        Bottom image (green channel).</span>
+<span class="sd">    thre : </span>
+<span class="sd">        Threshold for distinguish model&#39;s feet from background.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y_diff : int</span>
+<span class="sd">        Difference along y axis.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Search from bottom</span>
+    <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">feet_top</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">feet_bottom</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">col</span><span class="p">):</span>
+            <span class="c1"># Search model&#39;s feet in top image</span>
+            <span class="k">if</span> <span class="n">feet_top</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">top</span><span class="p">[</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thre</span><span class="p">:</span>
+                <span class="n">feet</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="c1"># Verify the feet</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="o">+</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">col</span> <span class="ow">and</span> <span class="n">top</span><span class="p">[</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thre</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">feet</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">feet</span><span class="p">:</span>
+                    <span class="n">feet_top</span> <span class="o">=</span> <span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span>
+            <span class="c1"># Search model&#39;s feet in bottom image</span>
+            <span class="k">if</span> <span class="n">feet_bottom</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">bottom</span><span class="p">[</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thre</span><span class="p">:</span>
+                <span class="n">feet</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="c1"># Verify the feet</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">x</span><span class="o">+</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">col</span> <span class="ow">and</span> <span class="n">bottom</span><span class="p">[</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thre</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">feet</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">feet</span><span class="p">:</span>
+                    <span class="n">feet_bottom</span> <span class="o">=</span> <span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span>
+            <span class="c1"># End if have found both feet in top and bottom image</span>
+            <span class="k">if</span> <span class="n">feet_top</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">feet_bottom</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">y_diff</span> <span class="o">=</span> <span class="n">feet_bottom</span> <span class="o">-</span> <span class="n">feet_top</span>
+                <span class="k">return</span> <span class="n">y_diff</span>
+
+    <span class="n">y_diff</span> <span class="o">=</span> <span class="n">feet_bottom</span> <span class="o">-</span> <span class="n">feet_top</span>
+    <span class="k">return</span> <span class="n">y_diff</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Jingze Lu.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+    </div>
+  </body>
+</html>

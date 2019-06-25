@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>clothsyn.main &#8212; clothsyn 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for clothsyn.main</h1><div class="highlight"><pre>
+<span></span><span class="c1"># !/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;Main function to synthesize top and bottom into one image.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="kn">import</span> <span class="nn">clothsyn.conf</span>
+<span class="kn">import</span> <span class="nn">clothsyn.outfit</span> <span class="k">as</span> <span class="nn">ot</span>
+<span class="kn">import</span> <span class="nn">clothsyn.findsame</span> <span class="k">as</span> <span class="nn">fs</span>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../index.html#clothsyn.main.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Main function.&quot;&quot;&quot;</span>
+    <span class="c1"># Configure parameters for clothing synthesis</span>
+    <span class="n">confs</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">configure</span><span class="p">()</span>
+    <span class="c1"># Create outfit objects</span>
+    <span class="n">outfits</span> <span class="o">=</span> <span class="p">[</span><span class="n">ot</span><span class="o">.</span><span class="n">Outfit</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">path</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+              <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;input_path&#39;</span><span class="p">]]</span>
+    <span class="c1"># Delete outfits that without top imag</span>
+    <span class="n">outfits</span> <span class="o">=</span> <span class="p">[</span><span class="n">outfit</span> <span class="k">for</span> <span class="n">outfit</span> <span class="ow">in</span> <span class="n">outfits</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">outfit</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">)]</span>
+    <span class="c1"># Find the same tops and bottoms between different outfits</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">find_same</span><span class="p">(</span><span class="n">outfits</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finding same completed.&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">outfit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outfits</span><span class="p">):</span>
+        <span class="c1"># Find same tops and bottoms</span>
+        <span class="n">same</span> <span class="o">=</span> <span class="n">outfit</span><span class="o">.</span><span class="n">same</span>
+        <span class="c1"># Segment top</span>
+        <span class="k">if</span> <span class="n">same</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">same</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">outfit</span><span class="o">.</span><span class="n">top_mask</span> <span class="o">=</span> <span class="n">outfits</span><span class="p">[</span><span class="n">same</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">top_mask</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">confs</span><span class="p">[</span><span class="s1">&#39;mask_path&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">outfit</span><span class="o">.</span><span class="n">top_mask</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">outfit</span><span class="o">.</span><span class="n">segment</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;seed_top&#39;</span><span class="p">],</span>
+                           <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;thre_top&#39;</span><span class="p">],</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;rect_top&#39;</span><span class="p">],</span>
+                           <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;mask_path&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># Segment bottom</span>
+        <span class="k">if</span> <span class="n">same</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">same</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="n">outfit</span><span class="o">.</span><span class="n">bottom_mask</span> <span class="o">=</span> <span class="n">outfits</span><span class="p">[</span><span class="n">same</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="o">.</span><span class="n">bottom_mask</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">confs</span><span class="p">[</span><span class="s1">&#39;mask_path&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">outfit</span><span class="o">.</span><span class="n">bottom_mask</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">outfit</span><span class="o">.</span><span class="n">segment</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;seed_bottom&#39;</span><span class="p">],</span>
+                           <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;thre_bottom&#39;</span><span class="p">],</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;rect_bottom&#39;</span><span class="p">],</span>
+                           <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;mask_path&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># Segment input4</span>
+        <span class="n">outfit</span><span class="o">.</span><span class="n">segment</span><span class="p">(</span><span class="s1">&#39;input4&#39;</span><span class="p">,</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;seed_input4&#39;</span><span class="p">],</span>
+                       <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;thre_input4&#39;</span><span class="p">],</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;rect_top&#39;</span><span class="p">],</span>
+                       <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;mask_path&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:d}</span><span class="s1"> segmentation completed.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Compute realtively position difference</span>
+        <span class="k">if</span> <span class="n">same</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">same</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">same</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">same</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="n">outfit</span><span class="o">.</span><span class="n">diff</span> <span class="o">=</span> <span class="n">outfits</span><span class="p">[</span><span class="n">same</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">diff</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">outfit</span><span class="o">.</span><span class="n">cpt_diff</span><span class="p">(</span><span class="n">confs</span><span class="p">[</span><span class="s1">&#39;rect_top&#39;</span><span class="p">],</span> <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;rect_bottom&#39;</span><span class="p">],</span>
+                            <span class="n">confs</span><span class="p">[</span><span class="s1">&#39;thre_feet&#39;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:d}</span><span class="s1"> diff computation completed.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Judge whether top or bottom is above</span>
+        <span class="n">outfit</span><span class="o">.</span><span class="n">judge_above</span><span class="p">(</span><span class="n">confs</span><span class="p">[</span><span class="s1">&#39;waist_line&#39;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:d}</span><span class="s1"> match judgement completed.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Generate output</span>
+        <span class="n">outfit</span><span class="o">.</span><span class="n">gen_res</span><span class="p">(</span><span class="n">confs</span><span class="p">[</span><span class="s1">&#39;output_path&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:d}</span><span class="s1"> output completed.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span>  <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Jingze Lu.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+    </div>
+  </body>
+</html>

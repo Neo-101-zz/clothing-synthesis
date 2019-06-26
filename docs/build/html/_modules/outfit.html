@@ -137,7 +137,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="n">cpt_y_diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_top_g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bottom_g</span><span class="p">,</span>
                                        <span class="n">thre_feet</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Outfit.judge_above"><a class="viewcode-back" href="../index.html#outfit.Outfit.judge_above">[docs]</a>    <span class="k">def</span> <span class="nf">judge_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waist_line</span><span class="p">):</span>
+<div class="viewcode-block" id="Outfit.judge_above"><a class="viewcode-back" href="../index.html#outfit.Outfit.judge_above">[docs]</a>    <span class="k">def</span> <span class="nf">judge_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waist_line</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Judge whether top is weared into bottom or not.</span>
 <span class="sd">        See judge.</span>
 
@@ -145,6 +145,9 @@
 <span class="sd">        ----------</span>
 <span class="sd">        waist_line : list of floats</span>
 <span class="sd">            Line at the height of waist for judgement.</span>
+<span class="sd">        save_path : str</span>
+<span class="sd">            Path of text file which stores the whether top or bottom is</span>
+<span class="sd">            above.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -156,7 +159,9 @@
         <span class="k">if</span> <span class="n">je</span><span class="o">.</span><span class="n">top_above</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">above</span> <span class="o">=</span> <span class="s1">&#39;top&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">above</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">above</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">above</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Outfit.gen_res"><a class="viewcode-back" href="../index.html#outfit.Outfit.gen_res">[docs]</a>    <span class="k">def</span> <span class="nf">gen_res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate the final result of clothing synthesis.</span>

@@ -73,18 +73,14 @@
     <span class="c1"># Use input1 as background</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">col</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-            <span class="c1"># Because in the segment part, the masks have been</span>
-            <span class="c1"># restricted in the rectangle area of top and bottom,</span>
-            <span class="c1"># when query the value of mask by the coordinate</span>
-            <span class="c1"># adding diff, it does not need to judge whether</span>
-            <span class="c1"># x+diff[&#39;x&#39;] or y+diff[&#39;y&#39;] has out of range of</span>
-            <span class="c1"># image.</span>
             <span class="k">if</span> <span class="n">above</span> <span class="o">==</span> <span class="s1">&#39;top&#39;</span><span class="p">:</span>
                 <span class="c1"># Through observation, the output image is based on</span>
                 <span class="c1"># top image. The poisition of model to the model in</span>
                 <span class="c1"># the top image is the same as output image.  </span>
                 <span class="c1"># So use top image as background.</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">mask_top</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> 
+                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">col</span> <span class="ow">and</span>
+                    <span class="n">y</span> <span class="o">+</span> <span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">row</span> <span class="ow">and</span>
+                    <span class="n">mask_top</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span>
                     <span class="n">mask_bottom</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">x</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">255</span><span class="p">):</span>
                     <span class="c1"># Draw the part that top does not cover the bottom</span>
                     <span class="n">res</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">bottom</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">x</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]]</span>
@@ -93,7 +89,9 @@
                     <span class="c1"># is used as backgound of output image.</span>
                     <span class="n">res</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">top</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
             <span class="k">elif</span> <span class="n">above</span> <span class="o">==</span> <span class="s1">&#39;bottom&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">mask_bottom</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">x</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">255</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">col</span> <span class="ow">and</span>
+                    <span class="n">y</span> <span class="o">+</span> <span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">row</span> <span class="ow">and</span>
+                    <span class="n">mask_bottom</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">x</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">255</span><span class="p">):</span>
                     <span class="c1"># Draw the bottom</span>
                     <span class="n">res</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">bottom</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">x</span><span class="o">+</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]]</span>
                 <span class="k">else</span><span class="p">:</span>

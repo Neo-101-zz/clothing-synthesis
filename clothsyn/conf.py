@@ -8,9 +8,9 @@ def configure():
     outfits_num = int(input('Enter the number of outfits: '))
     confs['outfits_num'] = outfits_num
     confs['inputs_num'] = inputs_num = 4
-    input_dir = './input/'
-    output_dir = './output/'
-    analysis_dir = './analysis/'
+    input_dir = '../input/'
+    output_dir = '../output/'
+    analysis_dir = '../analysis/'
     # make dirs
     for dir_ in [output_dir, analysis_dir]:
         if not os.path.exists(dir_):

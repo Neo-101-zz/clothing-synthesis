@@ -38,22 +38,22 @@
 <div class="toctree-wrapper compound">
 </div>
 </div>
-<div class="section" id="module-clothsyn.main">
-<span id="clothsyn-main"></span><h1>clothsyn main<a class="headerlink" href="#module-clothsyn.main" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-main">
+<span id="main"></span><h1>main<a class="headerlink" href="#module-main" title="Permalink to this headline">¶</a></h1>
 <p>Main function to synthesize top and bottom into one image.</p>
 <dl class="function">
-<dt id="clothsyn.main.main">
-<code class="sig-prename descclassname">clothsyn.main.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/main.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.main.main" title="Permalink to this definition">¶</a></dt>
+<dt id="main.main">
+<code class="sig-prename descclassname">main.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#main.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main function.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-clothsyn.outfit">
-<span id="clothsyn-outfit"></span><h1>clothsyn outfit<a class="headerlink" href="#module-clothsyn.outfit" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-outfit">
+<span id="outfit"></span><h1>outfit<a class="headerlink" href="#module-outfit" title="Permalink to this headline">¶</a></h1>
 <p>Represent outfit and synthesize clothing.</p>
 <dl class="class">
-<dt id="clothsyn.outfit.Outfit">
-<em class="property">class </em><code class="sig-prename descclassname">clothsyn.outfit.</code><code class="sig-name descname">Outfit</code><span class="sig-paren">(</span><em class="sig-param">top_path</em>, <em class="sig-param">bottom_path</em>, <em class="sig-param">input4_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/outfit.html#Outfit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.outfit.Outfit" title="Permalink to this definition">¶</a></dt>
+<dt id="outfit.Outfit">
+<em class="property">class </em><code class="sig-prename descclassname">outfit.</code><code class="sig-name descname">Outfit</code><span class="sig-paren">(</span><em class="sig-param">top_path</em>, <em class="sig-param">bottom_path</em>, <em class="sig-param">input4_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outfit.html#Outfit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#outfit.Outfit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent outfit and operate it to synthesize top and bottom into
 a outfit image.</p>
 <dl class="field-list simple">
@@ -69,11 +69,11 @@ a outfit image.</p>
 </dd>
 </dl>
 <dl class="method">
-<dt id="clothsyn.outfit.Outfit.cpt_diff">
-<code class="sig-name descname">cpt_diff</code><span class="sig-paren">(</span><em class="sig-param">rect_top</em>, <em class="sig-param">rect_bottom</em>, <em class="sig-param">thre_feet</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/outfit.html#Outfit.cpt_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.outfit.Outfit.cpt_diff" title="Permalink to this definition">¶</a></dt>
+<dt id="outfit.Outfit.cpt_diff">
+<code class="sig-name descname">cpt_diff</code><span class="sig-paren">(</span><em class="sig-param">rect_top</em>, <em class="sig-param">rect_bottom</em>, <em class="sig-param">thre_feet</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outfit.html#Outfit.cpt_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#outfit.Outfit.cpt_diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the relative position difference of model with
 respect to camera between input1 and input2.
-See clothsyn.cptdiff.</p>
+See cptdiff.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -96,10 +96,10 @@ y axis.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="clothsyn.outfit.Outfit.gen_res">
-<code class="sig-name descname">gen_res</code><span class="sig-paren">(</span><em class="sig-param">output_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/outfit.html#Outfit.gen_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.outfit.Outfit.gen_res" title="Permalink to this definition">¶</a></dt>
+<dt id="outfit.Outfit.gen_res">
+<code class="sig-name descname">gen_res</code><span class="sig-paren">(</span><em class="sig-param">output_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outfit.html#Outfit.gen_res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#outfit.Outfit.gen_res" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate the final result of clothing synthesis.
-See clothsyn.cover.</p>
+See cover.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -117,10 +117,10 @@ See clothsyn.cover.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="clothsyn.outfit.Outfit.judge_above">
-<code class="sig-name descname">judge_above</code><span class="sig-paren">(</span><em class="sig-param">waist_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/outfit.html#Outfit.judge_above"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.outfit.Outfit.judge_above" title="Permalink to this definition">¶</a></dt>
+<dt id="outfit.Outfit.judge_above">
+<code class="sig-name descname">judge_above</code><span class="sig-paren">(</span><em class="sig-param">waist_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outfit.html#Outfit.judge_above"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#outfit.Outfit.judge_above" title="Permalink to this definition">¶</a></dt>
 <dd><p>Judge whether top is weared into bottom or not.
-See clothsyn.judge.</p>
+See judge.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -138,9 +138,9 @@ See clothsyn.judge.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="clothsyn.outfit.Outfit.segment">
-<code class="sig-name descname">segment</code><span class="sig-paren">(</span><em class="sig-param">cloth</em>, <em class="sig-param">seed</em>, <em class="sig-param">thre</em>, <em class="sig-param">rect</em>, <em class="sig-param">save_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/outfit.html#Outfit.segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.outfit.Outfit.segment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Segment a image into a two-value mask.  See clothsyn.graygrow.</p>
+<dt id="outfit.Outfit.segment">
+<code class="sig-name descname">segment</code><span class="sig-paren">(</span><em class="sig-param">cloth</em>, <em class="sig-param">seed</em>, <em class="sig-param">thre</em>, <em class="sig-param">rect</em>, <em class="sig-param">save_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outfit.html#Outfit.segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#outfit.Outfit.segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segment a image into a two-value mask.  See graygrow.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -167,15 +167,15 @@ bottom image and ‘input_4’ for input4 image.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-clothsyn.conf">
-<span id="clothsyn-conf"></span><h1>clothsyn conf<a class="headerlink" href="#module-clothsyn.conf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-conf">
+<span id="conf"></span><h1>conf<a class="headerlink" href="#module-conf" title="Permalink to this headline">¶</a></h1>
 </div>
-<div class="section" id="module-clothsyn.loadimg">
-<span id="clothsyn-loadimg"></span><h1>clothsyn loadimg<a class="headerlink" href="#module-clothsyn.loadimg" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-loadimg">
+<span id="loadimg"></span><h1>loadimg<a class="headerlink" href="#module-loadimg" title="Permalink to this headline">¶</a></h1>
 <p>Load image with optional function of channel decomposition.</p>
 <dl class="function">
-<dt id="clothsyn.loadimg.load_img">
-<code class="sig-prename descclassname">clothsyn.loadimg.</code><code class="sig-name descname">load_img</code><span class="sig-paren">(</span><em class="sig-param">img_path</em>, <em class="sig-param">flag</em>, <em class="sig-param">decom</em>, <em class="sig-param">chan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/loadimg.html#load_img"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.loadimg.load_img" title="Permalink to this definition">¶</a></dt>
+<dt id="loadimg.load_img">
+<code class="sig-prename descclassname">loadimg.</code><code class="sig-name descname">load_img</code><span class="sig-paren">(</span><em class="sig-param">img_path</em>, <em class="sig-param">flag</em>, <em class="sig-param">decom</em>, <em class="sig-param">chan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/loadimg.html#load_img"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#loadimg.load_img" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load image with optional function of channel decomposition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -208,13 +208,13 @@ Red : 2.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-clothsyn.findsame">
-<span id="clothsyn-findsame"></span><h1>clothsyn findsame<a class="headerlink" href="#module-clothsyn.findsame" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-findsame">
+<span id="findsame"></span><h1>findsame<a class="headerlink" href="#module-findsame" title="Permalink to this headline">¶</a></h1>
 <p>Compare input images of different outfits to find same tops and
 bottoms.</p>
 <dl class="function">
-<dt id="clothsyn.findsame.find_same">
-<code class="sig-prename descclassname">clothsyn.findsame.</code><code class="sig-name descname">find_same</code><span class="sig-paren">(</span><em class="sig-param">outfits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/findsame.html#find_same"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.findsame.find_same" title="Permalink to this definition">¶</a></dt>
+<dt id="findsame.find_same">
+<code class="sig-prename descclassname">findsame.</code><code class="sig-name descname">find_same</code><span class="sig-paren">(</span><em class="sig-param">outfits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/findsame.html#find_same"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#findsame.find_same" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the same tops and bottoms between outfits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -237,8 +237,8 @@ outfit which has the same top and bottom before in <cite>outfits</cite>.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="clothsyn.findsame.is_same">
-<code class="sig-prename descclassname">clothsyn.findsame.</code><code class="sig-name descname">is_same</code><span class="sig-paren">(</span><em class="sig-param">img_1</em>, <em class="sig-param">img_2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/findsame.html#is_same"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.findsame.is_same" title="Permalink to this definition">¶</a></dt>
+<dt id="findsame.is_same">
+<code class="sig-prename descclassname">findsame.</code><code class="sig-name descname">is_same</code><span class="sig-paren">(</span><em class="sig-param">img_1</em>, <em class="sig-param">img_2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/findsame.html#is_same"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#findsame.is_same" title="Permalink to this definition">¶</a></dt>
 <dd><p>Figure out whether two images are the same or not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -259,12 +259,12 @@ outfit which has the same top and bottom before in <cite>outfits</cite>.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-clothsyn.graygrow">
-<span id="clothsyn-graygrow"></span><h1>clothsyn graygrow<a class="headerlink" href="#module-clothsyn.graygrow" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-graygrow">
+<span id="graygrow"></span><h1>graygrow<a class="headerlink" href="#module-graygrow" title="Permalink to this headline">¶</a></h1>
 <p>Segment gray image by region growing.</p>
 <dl class="function">
-<dt id="clothsyn.graygrow.gray_region_growing">
-<code class="sig-prename descclassname">clothsyn.graygrow.</code><code class="sig-name descname">gray_region_growing</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">seed_rate</em>, <em class="sig-param">thre</em>, <em class="sig-param">rect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/graygrow.html#gray_region_growing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.graygrow.gray_region_growing" title="Permalink to this definition">¶</a></dt>
+<dt id="graygrow.gray_region_growing">
+<code class="sig-prename descclassname">graygrow.</code><code class="sig-name descname">gray_region_growing</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">seed_rate</em>, <em class="sig-param">thre</em>, <em class="sig-param">rect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graygrow.html#gray_region_growing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graygrow.gray_region_growing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Region growing based on gray image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -300,13 +300,13 @@ the region of background.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-clothsyn.judge">
-<span id="clothsyn-judge"></span><h1>clothsyn judge<a class="headerlink" href="#module-clothsyn.judge" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-judge">
+<span id="judge"></span><h1>judge<a class="headerlink" href="#module-judge" title="Permalink to this headline">¶</a></h1>
 <p>Judge whether top is waered into bottom or not with extracted waist 
 line.</p>
 <dl class="function">
-<dt id="clothsyn.judge.extract">
-<code class="sig-prename descclassname">clothsyn.judge.</code><code class="sig-name descname">extract</code><span class="sig-paren">(</span><em class="sig-param">mask</em>, <em class="sig-param">judge_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/judge.html#extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.judge.extract" title="Permalink to this definition">¶</a></dt>
+<dt id="judge.extract">
+<code class="sig-prename descclassname">judge.</code><code class="sig-name descname">extract</code><span class="sig-paren">(</span><em class="sig-param">mask</em>, <em class="sig-param">judge_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/judge.html#extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#judge.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract waist line of mask.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -334,8 +334,8 @@ to the height of image.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="clothsyn.judge.top_above">
-<code class="sig-prename descclassname">clothsyn.judge.</code><code class="sig-name descname">top_above</code><span class="sig-paren">(</span><em class="sig-param">line</em>, <em class="sig-param">length</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/judge.html#top_above"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.judge.top_above" title="Permalink to this definition">¶</a></dt>
+<dt id="judge.top_above">
+<code class="sig-prename descclassname">judge.</code><code class="sig-name descname">top_above</code><span class="sig-paren">(</span><em class="sig-param">line</em>, <em class="sig-param">length</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/judge.html#top_above"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#judge.top_above" title="Permalink to this definition">¶</a></dt>
 <dd><p>Judge whether top is weared into bottom.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -356,12 +356,12 @@ to the height of image.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-clothsyn.cover">
-<span id="clothsyn-cover"></span><h1>clothsyn cover<a class="headerlink" href="#module-clothsyn.cover" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cover">
+<span id="cover"></span><h1>cover<a class="headerlink" href="#module-cover" title="Permalink to this headline">¶</a></h1>
 <p>Synthesize top and bottom into output image.</p>
 <dl class="function">
-<dt id="clothsyn.cover.cover_single">
-<code class="sig-prename descclassname">clothsyn.cover.</code><code class="sig-name descname">cover_single</code><span class="sig-paren">(</span><em class="sig-param">top</em>, <em class="sig-param">bottom</em>, <em class="sig-param">mask_top</em>, <em class="sig-param">mask_bottom</em>, <em class="sig-param">above</em>, <em class="sig-param">diff</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/cover.html#cover_single"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.cover.cover_single" title="Permalink to this definition">¶</a></dt>
+<dt id="cover.cover_single">
+<code class="sig-prename descclassname">cover.</code><code class="sig-name descname">cover_single</code><span class="sig-paren">(</span><em class="sig-param">top</em>, <em class="sig-param">bottom</em>, <em class="sig-param">mask_top</em>, <em class="sig-param">mask_bottom</em>, <em class="sig-param">above</em>, <em class="sig-param">diff</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cover.html#cover_single"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cover.cover_single" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cover top over bottom or bottom over top.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -392,13 +392,13 @@ respectively.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-clothsyn.cptdiff">
-<span id="clothsyn-cptdiff"></span><h1>clothsyn cptdiff<a class="headerlink" href="#module-clothsyn.cptdiff" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cptdiff">
+<span id="cptdiff"></span><h1>cptdiff<a class="headerlink" href="#module-cptdiff" title="Permalink to this headline">¶</a></h1>
 <p>Compute the relative position difference of model with
 respect to camera between input1 and input2.</p>
 <dl class="function">
-<dt id="clothsyn.cptdiff.central_x">
-<code class="sig-prename descclassname">clothsyn.cptdiff.</code><code class="sig-name descname">central_x</code><span class="sig-paren">(</span><em class="sig-param">mask</em>, <em class="sig-param">rect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/cptdiff.html#central_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.cptdiff.central_x" title="Permalink to this definition">¶</a></dt>
+<dt id="cptdiff.central_x">
+<code class="sig-prename descclassname">cptdiff.</code><code class="sig-name descname">central_x</code><span class="sig-paren">(</span><em class="sig-param">mask</em>, <em class="sig-param">rect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cptdiff.html#central_x"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cptdiff.central_x" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the x value of vertically central axis of top or bottom.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -419,8 +419,8 @@ respect to camera between input1 and input2.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="clothsyn.cptdiff.cpt_x_diff">
-<code class="sig-prename descclassname">clothsyn.cptdiff.</code><code class="sig-name descname">cpt_x_diff</code><span class="sig-paren">(</span><em class="sig-param">top_mask</em>, <em class="sig-param">bottom_mask</em>, <em class="sig-param">top_rect</em>, <em class="sig-param">bottom_rect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/cptdiff.html#cpt_x_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.cptdiff.cpt_x_diff" title="Permalink to this definition">¶</a></dt>
+<dt id="cptdiff.cpt_x_diff">
+<code class="sig-prename descclassname">cptdiff.</code><code class="sig-name descname">cpt_x_diff</code><span class="sig-paren">(</span><em class="sig-param">top_mask</em>, <em class="sig-param">bottom_mask</em>, <em class="sig-param">top_rect</em>, <em class="sig-param">bottom_rect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cptdiff.html#cpt_x_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cptdiff.cpt_x_diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute difference along x axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -445,8 +445,8 @@ respect to camera between input1 and input2.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="clothsyn.cptdiff.cpt_y_diff">
-<code class="sig-prename descclassname">clothsyn.cptdiff.</code><code class="sig-name descname">cpt_y_diff</code><span class="sig-paren">(</span><em class="sig-param">top</em>, <em class="sig-param">bottom</em>, <em class="sig-param">thre</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clothsyn/cptdiff.html#cpt_y_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clothsyn.cptdiff.cpt_y_diff" title="Permalink to this definition">¶</a></dt>
+<dt id="cptdiff.cpt_y_diff">
+<code class="sig-prename descclassname">cptdiff.</code><code class="sig-name descname">cpt_y_diff</code><span class="sig-paren">(</span><em class="sig-param">top</em>, <em class="sig-param">bottom</em>, <em class="sig-param">thre</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cptdiff.html#cpt_y_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cptdiff.cpt_y_diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute difference along y axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -487,15 +487,15 @@ respect to camera between input1 and input2.</p>
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to clothsyn’s documentation!</a></li>
-<li><a class="reference internal" href="#module-clothsyn.main">clothsyn main</a></li>
-<li><a class="reference internal" href="#module-clothsyn.outfit">clothsyn outfit</a></li>
-<li><a class="reference internal" href="#module-clothsyn.conf">clothsyn conf</a></li>
-<li><a class="reference internal" href="#module-clothsyn.loadimg">clothsyn loadimg</a></li>
-<li><a class="reference internal" href="#module-clothsyn.findsame">clothsyn findsame</a></li>
-<li><a class="reference internal" href="#module-clothsyn.graygrow">clothsyn graygrow</a></li>
-<li><a class="reference internal" href="#module-clothsyn.judge">clothsyn judge</a></li>
-<li><a class="reference internal" href="#module-clothsyn.cover">clothsyn cover</a></li>
-<li><a class="reference internal" href="#module-clothsyn.cptdiff">clothsyn cptdiff</a></li>
+<li><a class="reference internal" href="#module-main">main</a></li>
+<li><a class="reference internal" href="#module-outfit">outfit</a></li>
+<li><a class="reference internal" href="#module-conf">conf</a></li>
+<li><a class="reference internal" href="#module-loadimg">loadimg</a></li>
+<li><a class="reference internal" href="#module-findsame">findsame</a></li>
+<li><a class="reference internal" href="#module-graygrow">graygrow</a></li>
+<li><a class="reference internal" href="#module-judge">judge</a></li>
+<li><a class="reference internal" href="#module-cover">cover</a></li>
+<li><a class="reference internal" href="#module-cptdiff">cptdiff</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 

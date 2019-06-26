@@ -8,7 +8,7 @@ import time
 
 import cv2
 
-import clothsyn.loadimg as ld
+import loadimg as ld
 
 def is_same(img_1, img_2):
     """Figure out whether two images are the same or not.

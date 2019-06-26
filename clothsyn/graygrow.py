@@ -70,7 +70,7 @@ def gray_region_growing(img, seed_rate, thre, rect):
                 tempX < right and tempX >= left):
                 # calculate the distance between pixel and region
                 dist = abs(img[tempY, tempX] - mean_reg)
-                if dist < threshold and check[tempY, tempX] == 0:
+                if dist < thre and check[tempY, tempX] == 0:
                     # update the region
                     check[tempY, tempX] = 1
                     reg[tempY, tempX] = label

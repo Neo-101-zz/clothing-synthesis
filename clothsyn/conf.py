@@ -11,26 +11,32 @@ def configure():
     input_dir = '../input/'
     output_dir = '../output/'
     analysis_dir = '../analysis/'
-    # make dirs
-    for dir_ in [output_dir, analysis_dir]:
+
+    suffix = ['mask/', 'same.txt', 'diff.txt', 'above.txt']
+    ans_path = (analysis_dir + s for s in suffix)
+    mask_dir = next(ans_path)
+    confs['same_path'] = same = next(ans_path)
+    confs['diff_path'] = diff = next(ans_path)
+    confs['above_path'] = above = next(ans_path)
+
+    # Delete existed files
+    for f in [same, diff, above]:
+        if os.path.exists(f):
+            os.system('rm ' + f)
+
+    # Make directories
+    for dir_ in [output_dir, analysis_dir, mask_dir]:
         if not os.path.exists(dir_):
             os.system('mkdir ' + dir_)
 
-    suffix = ['mask/', 'same.txt', 'bias.txt', 'above.txt']
-    ans_path = (analysis_dir + s for s in suffix)
-    mask_dir = next(ans_path) 
-    confs['same_path'] = next(ans_path)
-    confs['bias_path'] = next(ans_path)
-    confs['above_path'] = next(ans_path)
-
     confs['input_path'] = [[
-        '{0}00{1:d}-input{2:d}.jpg'.format(input_dir, i+1, j+1) \
+        '{0}{1:d}-input{2:d}.jpg'.format(input_dir, i+1, j+1) \
         for j in range(inputs_num)] for i in range(outfits_num)]
     confs['mask_path'] = [[
-        '{0}00{1:d}-mask{2:d}.jpg'.format(mask_dir, i+1, j+1) \
+        '{0}{1:d}-mask{2:d}.jpg'.format(mask_dir, i+1, j+1) \
         for j in range(inputs_num)] for i in range(outfits_num)]
     confs['output_path'] = [
-        '{0}00{1:d}-output.jpg'.format(output_dir, i+1) \
+        '{0}{1:d}-output.jpg'.format(output_dir, i+1) \
         for i in range(outfits_num)]
 
     confs['thre_top'] = 100

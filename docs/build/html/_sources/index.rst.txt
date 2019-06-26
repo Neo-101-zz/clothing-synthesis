@@ -1,4 +1,4 @@
-.. clothsyn documentation master file, created by
+.. documentation master file, created by
    sphinx-quickstart on Tue Jun 25 10:54:47 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -11,49 +11,49 @@ Welcome to clothsyn's documentation!
    :caption: Contents:
 
 
-clothsyn main
+main
 =============
-.. automodule:: clothsyn.main
+.. automodule:: main
    :members:
 
-clothsyn outfit
+outfit
 ===============
-.. automodule:: clothsyn.outfit
+.. automodule:: outfit
    :members:
 
-clothsyn conf
+conf
 =============
-.. automodule:: clothsyn.conf
+.. automodule:: conf
    :members:
 
-clothsyn loadimg
+loadimg
 ================
-.. automodule:: clothsyn.loadimg
+.. automodule:: loadimg
    :members:
 
-clothsyn findsame
+findsame
 =================
-.. automodule:: clothsyn.findsame
+.. automodule:: findsame
    :members:
 
-clothsyn graygrow
+graygrow
 =================
-.. automodule:: clothsyn.graygrow
+.. automodule:: graygrow
    :members:
 
-clothsyn judge
+judge
 ==============
-.. automodule:: clothsyn.judge
+.. automodule:: judge
    :members:
 
-clothsyn cover
+cover
 ==============
-.. automodule:: clothsyn.cover
+.. automodule:: cover
    :members:
 
-clothsyn cptdiff
+cptdiff
 ================
-.. automodule:: clothsyn.cptdiff
+.. automodule:: cptdiff
    :members:
 
 Indices and tables

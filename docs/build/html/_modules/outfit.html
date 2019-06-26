@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>outfit &#8212; clothsyn 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for outfit</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;Represent outfit and synthesize clothing.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="kn">import</span> <span class="nn">loadimg</span> <span class="k">as</span> <span class="nn">ld</span>
+<span class="kn">import</span> <span class="nn">graygrow</span> <span class="k">as</span> <span class="nn">ggrow</span>
+<span class="kn">import</span> <span class="nn">cptdiff</span> <span class="k">as</span> <span class="nn">cb</span>
+<span class="kn">import</span> <span class="nn">judge</span> <span class="k">as</span> <span class="nn">je</span>
+<span class="kn">import</span> <span class="nn">cover</span> <span class="k">as</span> <span class="nn">cr</span>
+
+<div class="viewcode-block" id="Outfit"><a class="viewcode-back" href="../index.html#outfit.Outfit">[docs]</a><span class="k">class</span> <span class="nc">Outfit</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Represent outfit and operate it to synthesize top and bottom into</span>
+<span class="sd">    a outfit image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    top_path : str</span>
+<span class="sd">        Path of top image (input1.jpg).</span>
+<span class="sd">    bottom_path : str</span>
+<span class="sd">        Path of bottom image (input2.jpg).</span>
+<span class="sd">    input_path : str</span>
+<span class="sd">        Path of input4 image (input4.jpg).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">top_path</span><span class="p">,</span> <span class="n">bottom_path</span><span class="p">,</span> <span class="n">input4_path</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">ld</span><span class="o">.</span><span class="n">load_img</span><span class="p">(</span><span class="n">top_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_COLOR</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_top_r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_top_g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">ld</span><span class="o">.</span><span class="n">load_img</span><span class="p">(</span><span class="n">bottom_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_COLOR</span><span class="p">,</span>
+                                       <span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bottom_r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bottom_g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input4_b</span> <span class="o">=</span> <span class="n">ld</span><span class="o">.</span><span class="n">load_img</span><span class="p">(</span><span class="n">input4_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_COLOR</span><span class="p">,</span>
+                                        <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">return</span>
+
+<div class="viewcode-block" id="Outfit.segment"><a class="viewcode-back" href="../index.html#outfit.Outfit.segment">[docs]</a>    <span class="k">def</span> <span class="nf">segment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloth</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">thre</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Segment a image into a two-value mask.  See graygrow.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cloth : str</span>
+<span class="sd">            Type of image.  &#39;top&#39; for top image, &#39;bottom&#39; for</span>
+<span class="sd">            bottom image and &#39;input_4&#39; for input4 image.</span>
+<span class="sd">        seed : list of floats</span>
+<span class="sd">            Seed point for region growing.</span>
+<span class="sd">        thre : list of floats</span>
+<span class="sd">            Rectangle boundary for region growing.</span>
+<span class="sd">        save_path : str</span>
+<span class="sd">            Path of mask to be saved.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Nothing returned by this function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cloth</span> <span class="o">==</span> <span class="s1">&#39;top&#39;</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_mask</span> <span class="o">=</span> <span class="n">ggrow</span><span class="o">.</span><span class="n">gray_region_growing</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_top_r</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">thre</span><span class="p">,</span> <span class="n">rect</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cloth</span> <span class="o">==</span> <span class="s1">&#39;bottom&#39;</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_mask</span> <span class="o">=</span> <span class="n">ggrow</span><span class="o">.</span><span class="n">gray_region_growing</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bottom_r</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">thre</span><span class="p">,</span> <span class="n">rect</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cloth</span> <span class="o">==</span> <span class="s1">&#39;input4&#39;</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input4_mask</span> <span class="o">=</span> <span class="n">ggrow</span><span class="o">.</span><span class="n">gray_region_growing</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_input4_b</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">thre</span><span class="p">,</span> <span class="n">rect</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Segment error: wrong input of cloth.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Outfit.cpt_diff"><a class="viewcode-back" href="../index.html#outfit.Outfit.cpt_diff">[docs]</a>    <span class="k">def</span> <span class="nf">cpt_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect_top</span><span class="p">,</span> <span class="n">rect_bottom</span><span class="p">,</span> <span class="n">thre_feet</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the relative position difference of model with</span>
+<span class="sd">        respect to camera between input1 and input2.</span>
+<span class="sd">        See cptdiff.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rect_top : list of floats</span>
+<span class="sd">            Rectangle boundary of top.</span>
+<span class="sd">        bottom_top : list of floats</span>
+<span class="sd">            Rectangle boundary of bottom.</span>
+<span class="sd">        thre_feet : int</span>
+<span class="sd">            Threshold for computing relative position difference along</span>
+<span class="sd">            y axis.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Nothing returned by this function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diff</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="n">cpt_x_diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_mask</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_mask</span><span class="p">,</span>
+                                       <span class="n">rect_top</span><span class="p">,</span> <span class="n">rect_bottom</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diff</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="n">cpt_y_diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_top_g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bottom_g</span><span class="p">,</span>
+                                       <span class="n">thre_feet</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Outfit.judge_above"><a class="viewcode-back" href="../index.html#outfit.Outfit.judge_above">[docs]</a>    <span class="k">def</span> <span class="nf">judge_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waist_line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Judge whether top is weared into bottom or not.</span>
+<span class="sd">        See judge.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        waist_line : list of floats</span>
+<span class="sd">            Line at the height of waist for judgement.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Nothing returned by this function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">line</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">je</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input4_mask</span><span class="p">,</span> <span class="n">waist_line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">je</span><span class="o">.</span><span class="n">top_above</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">above</span> <span class="o">=</span> <span class="s1">&#39;top&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">above</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span></div>
+
+<div class="viewcode-block" id="Outfit.gen_res"><a class="viewcode-back" href="../index.html#outfit.Outfit.gen_res">[docs]</a>    <span class="k">def</span> <span class="nf">gen_res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate the final result of clothing synthesis.</span>
+<span class="sd">        See cover.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        output_path : str</span>
+<span class="sd">            Path to save the final result.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Nothing returns by this function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">cover_single</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">top_mask</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_mask</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">above</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Jingze Lu.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+    </div>
+  </body>
+</html>

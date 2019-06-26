@@ -4,14 +4,14 @@
 
 import cv2
 
-import clothsyn.conf
-import clothsyn.outfit as ot
-import clothsyn.findsame as fs
+import conf as cf
+import outfit as ot
+import findsame as fs
 
 def main():
     """Main function."""
     # Configure parameters for clothing synthesis
-    confs = conf.configure()
+    confs = cf.configure()
     # Create outfit objects
     outfits = [ot.Outfit(path[0], path[1], path[3])
               for path in confs['input_path']]
@@ -24,6 +24,8 @@ def main():
     for i, outfit in enumerate(outfits):
         # Find same tops and bottoms
         same = outfit.same
+        with open(confs['same_path'], 'a') as f:
+            f.write(str(same))
         # Segment top
         if same[0] != same[1]:
             outfit.top_mask = outfits[same[1]].top_mask
@@ -51,9 +53,11 @@ def main():
         else:
             outfit.cpt_diff(confs['rect_top'], confs['rect_bottom'],
                             confs['thre_feet'])
+        with open(confs['diff_path'], 'a') as f:
+            f.write(str(outfit.diff))
         print('{0:d} diff computation completed.'.format(i+1))
         # Judge whether top or bottom is above
-        outfit.judge_above(confs['waist_line'])
+        outfit.judge_above(confs['waist_line'], confs['above_path'])
         print('{0:d} match judgement completed.'.format(i+1))
         # Generate output
         outfit.gen_res(confs['output_path'][i])

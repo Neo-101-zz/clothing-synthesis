@@ -4,11 +4,11 @@
 
 import cv2
 
-import clothsyn.loadimg as ld
-import clothsyn.graygrow as ggrow
-import clothsyn.cptdiff as cb
-import clothsyn.judge as je
-import clothsyn.cover as cr
+import loadimg as ld
+import graygrow as ggrow
+import cptdiff as cb
+import judge as je
+import cover as cr
 
 class Outfit():
     """Represent outfit and operate it to synthesize top and bottom into
@@ -39,7 +39,7 @@ class Outfit():
             return
 
     def segment(self, cloth, seed, thre, rect, save_path):
-        """Segment a image into a two-value mask.  See clothsyn.graygrow.
+        """Segment a image into a two-value mask.  See graygrow.
 
         Parameters
         ----------
@@ -76,7 +76,7 @@ class Outfit():
     def cpt_diff(self, rect_top, rect_bottom, thre_feet):
         """Compute the relative position difference of model with
         respect to camera between input1 and input2.
-        See clothsyn.cptdiff.
+        See cptdiff.
 
         Parameters
         ----------
@@ -100,14 +100,17 @@ class Outfit():
         self.diff['y'] = cb.cpt_y_diff(self._top_g, self._bottom_g,
                                        thre_feet)
 
-    def judge_above(self, waist_line):
+    def judge_above(self, waist_line, save_path):
         """Judge whether top is weared into bottom or not.
-        See clothsyn.judge.
+        See judge.
 
         Parameters
         ----------
         waist_line : list of floats
             Line at the height of waist for judgement.
+        save_path : str
+            Path of text file which stores the whether top or bottom is
+            above.
 
         Returns
         -------
@@ -120,10 +123,12 @@ class Outfit():
             self.above = 'top'
         else:
             self.above = 'bottom'
+        with open(save_path, 'a') as f:
+            f.write(str(self.above))
 
     def gen_res(self, output_path):
         """Generate the final result of clothing synthesis.
-        See clothsyn.cover.
+        See cover.
 
         Parameters
         ----------

@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>findsame &#8212; clothsyn 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for findsame</h1><div class="highlight"><pre>
+<span></span><span class="c1"># !/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;Compare input images of different outfits to find same tops and</span>
+<span class="sd">bottoms.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="kn">import</span> <span class="nn">loadimg</span> <span class="k">as</span> <span class="nn">ld</span>
+
+<div class="viewcode-block" id="is_same"><a class="viewcode-back" href="../index.html#findsame.is_same">[docs]</a><span class="k">def</span> <span class="nf">is_same</span><span class="p">(</span><span class="n">img_1</span><span class="p">,</span> <span class="n">img_2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Figure out whether two images are the same or not.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img_1 : numpy.ndarray</span>
+<span class="sd">        One image (color).</span>
+<span class="sd">    img_2 : numpy.ndarray</span>
+<span class="sd">        Another image (color).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if `img_1` is the same with `img_2`, False otherwise.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># compare two images&#39; shape</span>
+    <span class="k">if</span> <span class="n">img_1</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">img_2</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="n">difference</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">img_1</span><span class="p">,</span> <span class="n">img_2</span><span class="p">)</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">difference</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">countNonZero</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">countNonZero</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">countNonZero</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="c1"># b, g, r channels of two imgs are equal</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="find_same"><a class="viewcode-back" href="../index.html#findsame.find_same">[docs]</a><span class="k">def</span> <span class="nf">find_same</span><span class="p">(</span><span class="n">outfits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Find the same tops and bottoms between outfits.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    outfits : list of Outfit</span>
+<span class="sd">        See the Oufit class.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of ints</span>
+<span class="sd">        List of 3 ints.  same[0] is the index of target outfit itself.</span>
+<span class="sd">        same[1] and same[2] is the index of outfit which has the same top</span>
+<span class="sd">        and the same bottom respectively before target outfit in</span>
+<span class="sd">        `outfits`.  same[1] and same[2] is equal to same[0] if there is no</span>
+<span class="sd">        outfit which has the same top and bottom before in `outfits`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t_s</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">outfits</span><span class="p">)):</span>
+        <span class="n">top_same</span> <span class="o">=</span> <span class="n">bottom_same</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">top_same</span> <span class="o">==</span> <span class="n">i</span> <span class="ow">and</span>
+                <span class="n">is_same</span><span class="p">(</span><span class="n">outfits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="n">outfits</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">top</span><span class="p">)):</span>
+                <span class="n">top_same</span> <span class="o">=</span> <span class="n">j</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">bottom_same</span> <span class="o">==</span><span class="n">i</span> <span class="ow">and</span>
+                <span class="n">is_same</span><span class="p">(</span><span class="n">outfits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="n">outfits</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">bottom</span><span class="p">)):</span>
+                <span class="n">bottom_same</span> <span class="o">=</span> <span class="n">j</span>
+        <span class="n">outfits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">same</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">top_same</span><span class="p">,</span> <span class="n">bottom_same</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">clothsyn 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Jingze Lu.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.
+    </div>
+  </body>
+</html>

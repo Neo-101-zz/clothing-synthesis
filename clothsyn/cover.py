@@ -36,18 +36,14 @@ def cover_single(top, bottom, mask_top,
     # Use input1 as background
     for x in range(col):
         for y in range(row):
-            # Because in the segment part, the masks have been
-            # restricted in the rectangle area of top and bottom,
-            # when query the value of mask by the coordinate
-            # adding diff, it does not need to judge whether
-            # x+diff['x'] or y+diff['y'] has out of range of
-            # image.
             if above == 'top':
                 # Through observation, the output image is based on
                 # top image. The poisition of model to the model in
                 # the top image is the same as output image.  
                 # So use top image as background.
-                if (mask_top[y, x] == 0 and 
+                if (x + diff['x'] < col and
+                    y + diff['y'] < row and
+                    mask_top[y, x] == 0 and
                     mask_bottom[y+diff['y'], x+diff['x']] == 255):
                     # Draw the part that top does not cover the bottom
                     res[y, x] = bottom[y+diff['y'], x+diff['x']]
@@ -56,7 +52,9 @@ def cover_single(top, bottom, mask_top,
                     # is used as backgound of output image.
                     res[y, x] = top[y, x]
             elif above == 'bottom':
-                if mask_bottom[y+diff['y'], x+diff['x']] == 255:
+                if (x + diff['x'] < col and
+                    y + diff['y'] < row and
+                    mask_bottom[y+diff['y'], x+diff['x']] == 255):
                     # Draw the bottom
                     res[y, x] = bottom[y+diff['y'], x+diff['x']]
                 else:
